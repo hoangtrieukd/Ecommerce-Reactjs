@@ -4,58 +4,57 @@ import axios from 'axios'
 import qs from 'qs'
 import paypalConfig from '../../configs/paypalConfig'
 
-const URL = 'https://zack-ecommerce-nodejs.herokuapp.com'
-// const URL = 'http://localhost:4000'
+// const URL = 'https://zack-ecommerce-nodejs.herokuapp.com'
+const URL = 'http://localhost:3000'
 
-const serverCall = (config) => {
+const serverCall = config => {
   //header authorization
   if (Auth.user_token) {
     const token = Auth.getToken()
     config.headers = {
-      "authorization": token
+      authorization: token
     }
   }
   //interceptors handle network error
   axios.interceptors.response.use(
-    (response) => {
-      return response;
+    response => {
+      return response
     },
-    function (error) {
+    function(error) {
       if (!error.response) {
         error.response = {
           data: 'net work error',
           status: 500
         }
       }
-      if(error.response.status===401){
+      if (error.response.status === 401) {
         Auth.logout()
         jumpTo('/login')
         throw error
       }
-      return Promise.reject(error);
-    });
+      return Promise.reject(error)
+    }
+  )
   config.baseURL = URL
   return axios(config)
 }
 export default serverCall
 
 export const login = (email, password) => {
-  const body =
-  {
-    "credential": {
-      "email": email,
-      "password": password
+  const body = {
+    credential: {
+      email: email,
+      password: password
     }
   }
   return serverCall({
     method: 'POST',
     url: '/users/login',
     data: body
+  }).then(res => {
+    Auth.setUserToken(res.data.user_token)
+    return res
   })
-    .then(res => {
-      Auth.setUserToken(res.data.user_token)
-      return res
-    })
 }
 
 export const getPaypalToken = () => {
@@ -67,6 +66,6 @@ export const getPaypalToken = () => {
       username: paypalConfig.username,
       password: paypalConfig.password
     },
-    data: qs.stringify({ "grant_type": "client_credentials" })
+    data: qs.stringify({ grant_type: 'client_credentials' })
   })
 }
