@@ -1,12 +1,12 @@
-import {combineReducers} from 'redux'
-import token from './tokenReducer'
-import signin from './signinReducer'
-import department from './departmentReducer'
-import product from './productReducer'
-import variant from './variantsReducer'
-import cart from './cartReducer'
-import checkout from './checkoutReducer'
-import filter from './filterReducer'
+import { combineReducers } from "redux";
+import token from "./tokenReducer";
+import signin from "./signinReducer";
+import department from "./departmentReducer";
+import product from "./productReducer";
+import variant from "./variantsReducer";
+import cart from "./cartReducer";
+import checkout from "./checkoutReducer";
+import filter from "./filterReducer";
 
 export default combineReducers({
   token,
@@ -17,4 +17,4 @@ export default combineReducers({
   cart,
   checkout,
   filter
-})
+});
